@@ -1,0 +1,41 @@
+body{
+    margin: 0px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: beige;
+}
+.root{
+    
+    width: 90vmin;
+    /* background-color: rgb(255, 255, 0); */
+    display: flex;
+    flex-wrap: wrap;
+    border: 2px solid rgb(0, 0, 0);
+
+}
+.blackbox, .whitebox{
+    background-color: grey;
+    /* box-sizing: border-box;   */
+    width: calc(12.5% - 2px);
+    aspect-ratio: 1 / 1; 
+    border: 1px solid rgb(0, 0, 0);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+
+}
+
+.whitebox{
+    background-color: rgb(255, 255, 255);
+    width: calc(12.5% - 2px);
+    aspect-ratio: 1/1;
+    border: 1px solid rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: brown;
+}
