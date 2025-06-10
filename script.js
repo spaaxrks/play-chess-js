@@ -21,7 +21,7 @@ const chessboard = ()=>{
                     blackbox.classList.add("blackbox");
 
                     blackbox.id=`${i}${j}`;
-                    blackbox.onclick= selectpiece;              //setting up event listener in HTML tag itself and calling selectpiece() function though through this method the onclick wont be directly shown inside the html but its still there.
+                    blackbox.onclick= selectbox;              //setting up event listener in HTML tag itself and calling selectpiece() function though through this method the onclick wont be directly shown inside the html but its still there.
                     root.append(blackbox);
                 }
                 else{
@@ -29,7 +29,7 @@ const chessboard = ()=>{
                     const whitebox = document.createElement("div");
                     whitebox.classList.add("whitebox");
                     whitebox.id=`${i}${j}`;
-                    whitebox.onclick= selectpiece;
+                    whitebox.onclick= selectbox;
                     root.append(whitebox);
                 }
 
@@ -43,7 +43,7 @@ const chessboard = ()=>{
                     const whitebox = document.createElement("div");
                     whitebox.classList.add("whitebox");
                     whitebox.id=`${i}${j}`;
-                    whitebox.onclick= selectpiece;
+                    whitebox.onclick= selectbox;
                     root.append(whitebox);
                 }
                 else{
@@ -51,7 +51,7 @@ const chessboard = ()=>{
                     const blackbox = document.createElement("div");
                     blackbox.classList.add("blackbox");
                     blackbox.id=`${i}${j}`;
-                    blackbox.onclick= selectpiece;
+                    blackbox.onclick= selectbox;
                     root.append(blackbox);
                 }
 
@@ -93,3 +93,29 @@ const putpieces = (pieces)=>{
 putpieces(pieces);
 
 
+// const selectpiece = ()=>{ }   //here we are not using arrow function because arrow function are not hoisted therefore we called the function before function def and it wont work
+let selectedpiece="";
+let selectedpos="";
+
+function selectbox(event){
+
+    if(selectedpiece === "")   //to check if its the fist selection or not
+    {
+        selectedpos= event.currentTarget.id;  //I added current so tht if we click the img also the id of div is taken
+
+        const keys = Object.keys(pieces);     //to retrieve the key from the object from value(position)
+        for(let i in keys){              //i represnts index(not same as pyhton)
+            const key =keys[i];
+            if(pieces[key]===selectedpos){
+                selectedpiece=key;
+            }
+        }
+    }
+    else{
+        selectedpos="";
+        selectedpiece="";
+    }
+    console.log(selectedpos);
+    console.log(selectedpiece);
+
+}
