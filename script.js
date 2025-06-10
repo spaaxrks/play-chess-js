@@ -135,34 +135,98 @@ function selectbox(event){
 
 
 function movepiece(){
-    //the move function should not work if the new pos has a piece of same color //to check if new pos has piece with same color
-    let samecolorpos = false;
-    const selectedcolor =selectedpiece.charAt(0); //return b or w
+    //the move function should not work if the new pos has a piece of same color 
+    let samecolorpos = false;    //to check if new pos has piece with same color
+    let diffcolorpos = false;    //to check if new pos has piece with diff color and if so kill
+    let killkey="";             //to store the piece if diffcolorpos is true
 
+    const selectedcolor =selectedpiece.charAt(0); //returns b or w
+    
+    
     const keys = Object.keys(pieces);
-        for(let i in keys){             
-            const key =keys[i];
-            if(key.charAt(0)===selectedcolor && pieces[key]===newpos){  //if the color of any key is same as selected piece color *and*
-                samecolorpos=true;                                         //if any key{pieces} have same value(pos) as newpos
+    for(let i in keys){             
+        const key =keys[i];
+        if(pieces[key]===newpos){                    //if any key{pieces} have same value(pos) as newpos in object
+            if(key.charAt(0)===selectedcolor){          //if the color of any key is same as selected piece color 
+                samecolorpos=true;                                         
+            }
+            else{
+                diffcolorpos=true;                      //if the color of any key is diff as selected piece color 
+                killkey=key;
             }
         }
-
-    if(samecolorpos !== true){           //ie-if the new pos has no piece of same color
-
-        //updating object with new pos for selected piece
-        pieces[selectedpiece]=newpos;
-        console.log(pieces);
-
-        //updating html
-        const moving = document.getElementById(selectedpos);  //selecting and removing at old position
-        moving.innerHTML="";
-
-        const moved = document.getElementById(newpos);      //adding the peice to new pos
-        const img =document.createElement("img");
-        img.src=images[selectedpiece];
-        moved.append(img)
+      
     }
-    else{
-        console.log("same color error");
+
+    if(samecolorpos === true){           //ie-if the new pos has no piece of same color
+        console.log("invaild move: same color piece already present");
+        return;      //to exit function
     }
+
+    if( diffcolorpos===true){
+        console.log("new position is at diff color piece therefore killing");
+        killpiece(killkey);
+        return;
+    }
+
+
+    //updating object with new pos for selected piece
+    pieces[selectedpiece]=newpos;
+    console.log(pieces);
+
+    //updating html
+    const moving = document.getElementById(selectedpos);  //selecting and removing at old position
+    moving.innerHTML="";
+
+    const moved = document.getElementById(newpos);      //adding the peice to new pos
+    const img =document.createElement("img");
+    img.src=images[selectedpiece];
+    moved.append(img)
+    
+    
 }
+
+
+
+
+
+
+
+
+let killedpieces =[];                           //to store killed pieces
+
+const div = document.createElement("div");      //we are creating a div to display images of kiled pieces
+    div.classList.add("pieceskilled");
+    root.insertAdjacentElement("afterend",div)
+
+function killpiece(killkey){           //killkey is piece that is to be killed
+
+    killedpieces.push(killkey);
+    
+    //object manupilation
+    delete(pieces[killkey]);        //deleting the killeditem from object
+    console.log(pieces);
+
+    pieces[selectedpiece]=newpos;       //changing pos of selected item to new pos
+
+    //html manupilation
+    const killed = document.getElementById(newpos);         //removing image of killed item
+    killed.innerHTML="";
+
+    const moving = document.getElementById(selectedpos);       //removing selected piece image from old pos
+    moving.innerHTML="";
+
+    const moved = document.getElementById(newpos);          //adding selectd piece image to new pos
+    const img = document.createElement("img")
+    img.src=images[selectedpiece];
+    moved.append(img);
+    
+
+    
+    //adding deleted piece images to html div to display
+    const killedimg = document.createElement("img");
+    killedimg.src=images[killkey];
+    div.append(killedimg);
+    
+}
+

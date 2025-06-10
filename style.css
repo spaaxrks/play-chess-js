@@ -57,3 +57,12 @@ body{
     width:70%;
     height:70%;
 }
+
+.pieceskilled{
+    
+    
+    margin-top:5px ;
+}
+.pieceskilled img{
+    width: 30px;
+}
