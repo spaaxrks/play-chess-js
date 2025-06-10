@@ -78,6 +78,9 @@ const images =  {
 }
 
 
+
+
+
 //logic for putting pieces in chessboard
 const putpieces = (pieces)=>{
 
@@ -93,9 +96,14 @@ const putpieces = (pieces)=>{
 putpieces(pieces);
 
 
+
+
+
+
 // const selectpiece = ()=>{ }   //here we are not using arrow function because arrow function are not hoisted therefore we called the function before function def and it wont work
 let selectedpiece="";
 let selectedpos="";
+let newpos =""
 
 function selectbox(event){
 
@@ -110,12 +118,51 @@ function selectbox(event){
                 selectedpiece=key;
             }
         }
+        console.log(selectedpos);
+        console.log(selectedpiece);
     }
     else{
+        newpos = event.currentTarget.id;
+        console.log(newpos);
+        movepiece();
         selectedpos="";
         selectedpiece="";
     }
-    console.log(selectedpos);
-    console.log(selectedpiece);
+    
+}
 
+
+
+
+function movepiece(){
+    //the move function should not work if the new pos has a piece of same color //to check if new pos has piece with same color
+    let samecolorpos = false;
+    const selectedcolor =selectedpiece.charAt(0); //return b or w
+
+    const keys = Object.keys(pieces);
+        for(let i in keys){             
+            const key =keys[i];
+            if(key.charAt(0)===selectedcolor && pieces[key]===newpos){  //if the color of any key is same as selected piece color *and*
+                samecolorpos=true;                                         //if any key{pieces} have same value(pos) as newpos
+            }
+        }
+
+    if(samecolorpos !== true){           //ie-if the new pos has no piece of same color
+
+        //updating object with new pos for selected piece
+        pieces[selectedpiece]=newpos;
+        console.log(pieces);
+
+        //updating html
+        const moving = document.getElementById(selectedpos);  //selecting and removing at old position
+        moving.innerHTML="";
+
+        const moved = document.getElementById(newpos);      //adding the peice to new pos
+        const img =document.createElement("img");
+        img.src=images[selectedpiece];
+        moved.append(img)
+    }
+    else{
+        console.log("same color error");
+    }
 }
