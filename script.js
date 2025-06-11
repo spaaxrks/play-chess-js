@@ -135,6 +135,15 @@ function selectbox(event){
 
 
 function movepiece(){
+
+    if(isValidmove(selectedpiece,selectedpos,newpos)!=true){        //to check move validation we use isValidmove() function and if it is false exit the function
+        console.log(`Not  a valid move for ${selectedpiece}`);
+        return;             //to exit the function
+    }
+
+
+
+
     //the move function should not work if the new pos has a piece of same color 
     let samecolorpos = false;    //to check if new pos has piece with same color
     let diffcolorpos = false;    //to check if new pos has piece with diff color and if so kill
@@ -230,3 +239,157 @@ function killpiece(killkey){           //killkey is piece that is to be killed
     
 }
 
+
+
+
+
+
+
+
+
+function getcoords(pos){
+    return [parseInt(pos[0]),parseInt(pos[1])];      //converts whatever position it takes into array of intergers [1,2] //needed for mathematical calculations
+}
+
+
+function isValidmove(selectedpiece,selectedpos,newpos){
+    
+    const [fx, fy]=getcoords(selectedpos);  //to get from x axis and from yaxis
+    const [tx, ty]=getcoords(newpos);       //to get to x axis and to yaxis
+
+    const dx = Math.abs(tx-fx);     //to get how many boxes in x axis the piece is to move
+    const dy =Math.abs(ty-fy)       //to get how many boxes in y axis the piece is to move 
+
+   
+   
+    if(selectedpiece.includes("rook")){
+
+        if(fx===tx || fy===ty){       //if the from pos and to pos are in the same x axis or if the from and to is in the same y  //ie-if it is moved to the same x or y axis(staight line)                
+           
+            if(isPathClear(fx,fy,tx,ty,pieces)===true){             //checks if there is any pieces in between its path
+                return true;     
+            }          
+        }
+        else{
+            return false;
+        }
+    }
+
+
+    if(selectedpiece.includes("bishop")){
+        
+        if(dx===dy){       //if the dif in x and y axis are same(which means diagonal)
+
+            if(isPathClear(fx,fy,tx,ty,pieces)===true){            //checks if there is any pieces in between its path
+                return true;     
+            }                    
+        }
+        else{
+            return false;
+        }
+    }
+
+
+    if(selectedpiece.includes("queen")){
+        
+        if(dx===dy || fx===tx || fy===ty){       //combines rook and bishop
+
+            if(isPathClear(fx,fy,tx,ty,pieces)===true){             //checks if there is any pieces in between its path
+                return true;     
+            }      
+                
+        }
+        else{
+            return false;
+        }
+    }
+
+
+    if(selectedpiece.includes("king")){
+        
+        if(dx<=1 && dy<=1){       //it can move in any direction but it should be only 1 move
+            return true;          //as it only moves 1 block it does not have path   
+        }
+        else{
+            return false;
+        }
+    }
+
+    if(selectedpiece.includes("knight")){
+        
+        if((dx===2 && dy===1) || (dx===1 && dy===2)){       //it can move in only move in L shape
+            return true;                                    //knight also does not have a path as it can jump over pieces
+        }
+        else{
+            return false;
+        }
+    }
+
+    if(selectedpiece.includes("pawn")){
+        
+        const direction = selectedpiece[0]==="w"? -1:1 ;   //if sected piece first char is w then direction=-1 else 1(as white need to go upwards so -1 and it cannot go downwards)
+        const startrow = selectedpiece[0]==="w"? 7:2 ;   //if selected piece is white its starting row is 7 else 2(as pawn in starting row can go 2 boxes)
+
+
+        if((tx === fx+direction && dy ===0 && Object.values(pieces).includes(newpos)!==true)){       //if (To pos) is exactly (From pos + 1) for black from (pos -1)for white and y axis does not change and if the new pos has no pieces present(if there any piece present it cant move as it can only kill diagonally)
+            return true;        //exits function
+        }
+
+
+        const middlepos = `${fx+direction}${fy}`;          
+        if( fx === startrow && tx === fx + 2 * direction && dy===0 &&       //if start row - pawn can move 2 blocks froward and if new pos has no pieces and if middle block also has no pieces
+            Object.values(pieces).includes(newpos)!==true &&
+            Object.values(pieces).includes(middlepos)!==true)
+        {      
+            return true;
+        }
+
+
+        if(tx===fx+direction && dy===1){            //if it is one pos forward and 1 pos towards left or right(ie exactly 1 box diagonal forward)
+            
+            const selectedcolor = selectedpiece[0];     //this parts checks if the diagonal box has same color or diff and only allows diff color
+            const keys = Object.keys(pieces);
+            for(let i in keys){
+                const key = keys[i];
+                if (pieces[key]===newpos)
+                {
+                    if(key[0]!== selectedcolor){
+                        return true;
+                    }
+                }
+            }
+
+        }
+        
+        return false;               //if none of the above condition matches returns false
+
+    }
+
+}
+
+
+
+function isPathClear(fx,fy,tx,ty,pieces){
+
+    const dirx=Math.sign(tx-fx);              //gives direction of x movement (1 or -1 or 0)
+    const diry=Math.sign(ty-fy);              //gives direction of y movement (1 or -1 or 0)
+
+    const x=fx+dirx;          //assigning x as 1 box forward in x axis
+    const y=fx+diry;          //assigning y as 1 box forward in y axis
+
+    while(x!==tx || y!==ty){         //while x or y doees not reach the target
+
+        const pos = `${x}${y}`;         //creating a string of x and y in this format 14 to compare with vlues in obj
+
+        if(Object.values(pieces).includes(pos)===true){          //if there is any piece present in any of the box in its path
+            return false
+        }
+        
+        x=x+dirx;
+        y=x+diry;
+    }
+
+    
+
+
+}
