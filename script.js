@@ -113,6 +113,10 @@ function selectbox(event){
 
 
         //for css purpose
+        document.querySelectorAll(".selected").forEach((el)=>{      //for removing class=selected from all div before every on click
+            el.classList.remove("selected");
+        });
+
         event.currentTarget.classList.add("selected");   //for adding class=selected in onclicked element
         
 
@@ -184,6 +188,13 @@ function movepiece(){
     }
 
     if( diffcolorpos===true){
+
+        if(killkey.includes("king")){
+
+            console.log("invalid move:cannot kill king");
+            return;                                 //exits function
+        }
+
         console.log("new position is at diff color piece therefore killing");
         killpiece(killkey);
         return;
@@ -385,22 +396,22 @@ function isPathClear(fx,fy,tx,ty,pieces){
     const dirx=Math.sign(tx-fx);              //gives direction of x movement (1 or -1 or 0)
     const diry=Math.sign(ty-fy);              //gives direction of y movement (1 or -1 or 0)
 
-    const x=fx+dirx;          //assigning x as 1 box forward in x axis
-    const y=fx+diry;          //assigning y as 1 box forward in y axis
+    let x=fx+dirx;          //assigning x as 1 box forward in x axis
+    let y=fy+diry;          //assigning y as 1 box forward in y axis
 
     while(x!==tx || y!==ty){         //while x or y doees not reach the target
 
         const pos = `${x}${y}`;         //creating a string of x and y in this format 14 to compare with vlues in obj
 
         if(Object.values(pieces).includes(pos)===true){          //if there is any piece present in any of the box in its path
-            return false
+            return false;
         }
         
         x=x+dirx;
-        y=x+diry;
+        y=y+diry;
     }
 
-    
+    return true;
 
 
 }
