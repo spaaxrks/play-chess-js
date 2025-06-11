@@ -111,6 +111,11 @@ function selectbox(event){
     {
         selectedpos= event.currentTarget.id;  //I added current so tht if we click the img also the id of div is taken
 
+
+        //for css purpose
+        event.currentTarget.classList.add("selected");   //for adding class=selected in onclicked element
+        
+
         const keys = Object.keys(pieces);     //to retrieve the key from the object from value(position)
         for(let i in keys){              //i represnts index(not same as pyhton)
             const key =keys[i];
@@ -120,6 +125,7 @@ function selectbox(event){
         }
         console.log(selectedpos);
         console.log(selectedpiece);
+
     }
     else{
         newpos = event.currentTarget.id;
@@ -127,6 +133,11 @@ function selectbox(event){
         movepiece();
         selectedpos="";
         selectedpiece="";
+
+        //for css purposes
+        document.querySelectorAll(".selected").forEach((el)=>{      //for removing class=selected from all div before every on click
+            el.classList.remove("selected");
+        });
     }
     
 }

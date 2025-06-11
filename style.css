@@ -5,14 +5,15 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color:beige;
+    /* background-color:#fff5d7; */
+    background-image: url('./image.png');
 }
 .headingdiv {
-    color: 	#1e293b;
+    color: 	#011727;
     font-size: 15px;
 }
 .headingdiv span{
-    color: 	#38bdf8;
+    color: 	#2da7db;
 }
 
 .root{
@@ -26,7 +27,7 @@ body{
 
 }
 .blackbox {
-    background-color: #888;
+    background-color: #004474;
     /* box-sizing: border-box;   */
     width: calc(12.5% - 2px);
     aspect-ratio: 1 / 1; 
@@ -41,7 +42,7 @@ body{
 }
 
 .whitebox{
-    background-color:#fefefe;
+    background-color:#e0f8f8;
     width: calc(12.5% - 2px);
     aspect-ratio: 1/1;
     border: 1px solid rgb(0, 0, 0);
@@ -65,4 +66,18 @@ body{
 }
 .pieceskilled img{
     width: 30px;
+}
+
+.selected{
+    background-color: rgba(255, 215, 0, 0.5);
+}
+.blackbox:hover , .whitebox:hover{
+    outline: 2px dashed rgba(255, 215, 0, 0.5);
+    cursor: pointer;
+    position: relative;     /* Required for z-index to apply */
+    z-index: 1;             /* Makes sure the outline is above adjacent boxes */
+    
+}
+.blackbox img:hover , .whitebox img:hover{
+    transform: scale(1.2);
 }
