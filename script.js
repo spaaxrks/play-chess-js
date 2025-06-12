@@ -12,6 +12,21 @@ playchess.innerHTML="Play<span>Chess</span>JS";
 headingdiv.append(headinglogo);
 headingdiv.append(playchess);
 
+//sound effect definitions
+const moveSound = new Audio("./sounds/piecemove.wav");
+const invalidSound = new Audio("./sounds/invalidmove.wav");
+const killSound = new Audio("./sounds/pieccapture.mp3");
+
+function playMoveSound() {
+    moveSound.play();
+}
+function playInvalidSound() {
+    invalidSound.play();
+}
+function playKillSound() {
+    killSound.play();
+}
+
 
 //creating chessboard logic
 const chessboard = ()=>{              
@@ -112,6 +127,7 @@ headingdiv.insertAdjacentElement("afterend",CurrentTurnDiv);
 
 function updateTurndiv(){       //function to update UI display of Turn
     CurrentTurnDiv.innerText=currentTurn === "w"? "White's Turn!":"Black's Turn!";
+    CurrentTurnDiv.style.color=currentTurn === "w"?"white":"black"
 }
 
 
@@ -179,6 +195,7 @@ function selectbox(event){
 function movepiece(){
 
     if(isValidmove(selectedpiece,selectedpos,newpos)!=true){        //to check move validation we use isValidmove() function and if it is false exit the function
+        playInvalidSound();
         console.log(`Not  a valid move for ${selectedpiece}`);
         return;             //to exit the function
     }
@@ -218,6 +235,7 @@ function movepiece(){
 
         if(killkey.includes("king")){
 
+            playInvalidSound();   
             console.log("invalid move:cannot kill king");
             return;                                 //exits function
         }
@@ -231,6 +249,7 @@ function movepiece(){
     //updating object with new pos for selected piece
     pieces[selectedpiece]=newpos;
     console.log(pieces);
+    playMoveSound();
     currentTurn= currentTurn === "w"? "b":"w";   //if current turn is white change to black after moving
     console.log("Turn Changed to:",currentTurn);
     updateTurndiv();            //updating UI
@@ -280,7 +299,7 @@ function killpiece(killkey){           //killkey is piece that is to be killed
     console.log(pieces);
 
     pieces[selectedpiece]=newpos;       //changing pos of selected item to new pos
-
+    playKillSound();
 
     currentTurn= currentTurn === "w"? "b":"w";   //if current turn is white change to black after killing
     console.log("Turn Changed to:",currentTurn);

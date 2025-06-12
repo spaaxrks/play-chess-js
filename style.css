@@ -65,6 +65,7 @@ body{
 .root img{
     width:70%;
     height:70%;
+    transition: transform 0.3s ease-in-out;
 }
 
 .pieceskilled{
@@ -81,6 +82,7 @@ body{
     border: 1px black solid;
     margin-right: 5px;
     /* opacity: 0.5; */
+    
     
 }
 .blackpiecesdiv{
@@ -104,6 +106,7 @@ body{
     transform: scale(1.2);
 }
 .CurrentTurnDiv{
-    font-size: 23px;
-    opacity: 0.2;
+    font-size: 25px;
+    opacity: 0.5;
+    color: white;
 }
