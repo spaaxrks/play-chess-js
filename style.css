@@ -9,8 +9,16 @@ body{
     background-image: url('./image.png');
 }
 .headingdiv {
+    display: flex;
+    align-items: center;
     color: 	#011727;
     font-size: 15px;
+}
+.headingdiv img{
+    width: 30px;
+    height: 30px;
+    padding-bottom: 5px;
+    margin-right: 2px;
 }
 .headingdiv span{
     color: 	#2da7db;
@@ -60,6 +68,7 @@ body{
 }
 
 .pieceskilled{
+    display: flex;
     
     
     margin-top:5px ;
@@ -67,6 +76,19 @@ body{
 .pieceskilled img{
     width: 30px;
 }
+
+.whitepiecesdiv{
+    border: 1px black solid;
+    margin-right: 5px;
+    /* opacity: 0.5; */
+    
+}
+.blackpiecesdiv{
+    border: 1px black solid;
+    margin-left: 5px;
+    /* opacity: 0.5; */
+}
+
 
 .selected{
     background-color: rgba(255, 215, 0, 0.5);
@@ -80,4 +102,8 @@ body{
 }
 .blackbox img:hover , .whitebox img:hover{
     transform: scale(1.2);
+}
+.CurrentTurnDiv{
+    font-size: 23px;
+    opacity: 0.2;
 }

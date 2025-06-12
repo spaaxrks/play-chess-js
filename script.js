@@ -4,8 +4,12 @@ const root = document.querySelector(".root");
 document.body.insertAdjacentHTML("afterBegin",`<div class="headingdiv"></div>`);
 const headingdiv = document.querySelector(".headingdiv");
 
+const headinglogo=document.createElement("img");
+headinglogo.src="pieces/black-king.png"
+
 const playchess=document.createElement("h1");
 playchess.innerHTML="Play<span>Chess</span>JS";
+headingdiv.append(headinglogo);
 headingdiv.append(playchess);
 
 
@@ -99,6 +103,19 @@ putpieces(pieces);
 
 
 
+let currentTurn = "w";              //for playerbased game //initialize current lement as w first
+
+const CurrentTurnDiv = document.createElement("div"); //for displaying turn
+CurrentTurnDiv.classList.add("CurrentTurnDiv");
+CurrentTurnDiv.innerText="White's Turn!";
+headingdiv.insertAdjacentElement("afterend",CurrentTurnDiv);
+
+function updateTurndiv(){       //function to update UI display of Turn
+    CurrentTurnDiv.innerText=currentTurn === "w"? "White's Turn!":"Black's Turn!";
+}
+
+
+
 
 // const selectpiece = ()=>{ }   //here we are not using arrow function because arrow function are not hoisted therefore we called the function before function def and it wont work
 let selectedpiece="";
@@ -106,11 +123,12 @@ let selectedpos="";
 let newpos =""
 
 function selectbox(event){
+    
+    const clickedpos=event.currentTarget.id;        //I added current so tht if we click the img also the id of div is taken
 
     if(selectedpiece === "")   //to check if its the fist selection or not
     {
-        selectedpos= event.currentTarget.id;  //I added current so tht if we click the img also the id of div is taken
-
+        selectedpos= clickedpos;  //updating selected pos variable outside
 
         //for css purpose
         document.querySelectorAll(".selected").forEach((el)=>{      //for removing class=selected from all div before every on click
@@ -129,6 +147,15 @@ function selectbox(event){
         }
         console.log(selectedpos);
         console.log(selectedpiece);
+
+        if(selectedpiece === ""||selectedpiece[0]!=currentTurn){     //for coming out of function if not the current Turn or slected box has no piece
+            console.log("Not your Turn");
+            selectedpiece="";
+            document.querySelectorAll(".selected").forEach((el)=>{      //for removing class=selected from all div before every on click
+                el.classList.remove("selected");
+            });
+            return;
+        }
 
     }
     else{
@@ -204,6 +231,10 @@ function movepiece(){
     //updating object with new pos for selected piece
     pieces[selectedpiece]=newpos;
     console.log(pieces);
+    currentTurn= currentTurn === "w"? "b":"w";   //if current turn is white change to black after moving
+    console.log("Turn Changed to:",currentTurn);
+    updateTurndiv();            //updating UI
+
 
     //updating html
     const moving = document.getElementById(selectedpos);  //selecting and removing at old position
@@ -227,8 +258,18 @@ function movepiece(){
 let killedpieces =[];                           //to store killed pieces
 
 const div = document.createElement("div");      //we are creating a div to display images of kiled pieces
-    div.classList.add("pieceskilled");
-    root.insertAdjacentElement("afterend",div)
+div.classList.add("pieceskilled");
+
+const whitepiecesdiv=document.createElement("div");
+whitepiecesdiv.classList.add("whitepiecesdiv");
+div.append(whitepiecesdiv);
+
+const blackpiecesdiv=document.createElement("div");
+blackpiecesdiv.classList.add("blackpiecesdiv");
+div.append(blackpiecesdiv);
+
+root.insertAdjacentElement("afterend",div)
+
 
 function killpiece(killkey){           //killkey is piece that is to be killed
 
@@ -239,6 +280,11 @@ function killpiece(killkey){           //killkey is piece that is to be killed
     console.log(pieces);
 
     pieces[selectedpiece]=newpos;       //changing pos of selected item to new pos
+
+
+    currentTurn= currentTurn === "w"? "b":"w";   //if current turn is white change to black after killing
+    console.log("Turn Changed to:",currentTurn);
+    updateTurndiv();            //updating UI
 
     //html manupilation
     const killed = document.getElementById(newpos);         //removing image of killed item
@@ -257,7 +303,12 @@ function killpiece(killkey){           //killkey is piece that is to be killed
     //adding deleted piece images to html div to display
     const killedimg = document.createElement("img");
     killedimg.src=images[killkey];
-    div.append(killedimg);
+    if(killkey[0]=="w"){
+        whitepiecesdiv.append(killedimg);
+    }
+    else{
+        blackpiecesdiv.append(killedimg);
+    }
     
 }
 
